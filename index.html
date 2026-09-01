@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b2346">
+  <title>Curriculum Night Schedule Generator</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="hero">
+    <div class="hero-inner">
+      <p class="eyebrow">CAPE FEAR ACADEMY</p>
+      <h1>Curriculum Night<br>Schedule Generator</h1>
+      <p class="lede">Turn one Excel schedule export into polished, one-page student PDFs. Everything runs privately in this browser.</p>
+    </div>
+  </header>
+
+  <main>
+    <section class="card upload-card" aria-labelledby="upload-title">
+      <div class="step">1</div>
+      <div class="section-copy">
+        <h2 id="upload-title">Choose the schedule spreadsheet</h2>
+        <p>Use an .xlsx file with Student, Class, Teacher, Location, Period, and Time columns.</p>
+        <label class="drop-zone" id="dropZone">
+          <input id="fileInput" type="file" accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
+          <span class="upload-icon" aria-hidden="true">↑</span>
+          <strong>Drop the spreadsheet here</strong>
+          <span>or click to browse</span>
+        </label>
+        <div id="fileStatus" class="file-status" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <section class="card settings-card is-hidden" id="workspace" aria-labelledby="settings-title">
+      <div class="step">2</div>
+      <div class="section-copy">
+        <div class="section-heading">
+          <div>
+            <h2 id="settings-title">Review and generate</h2>
+            <p>Confirm the event title, inspect flagged schedules, then download.</p>
+          </div>
+          <span class="privacy-pill">Processed locally</span>
+        </div>
+
+        <div class="settings-grid">
+          <label>
+            <span>PDF heading</span>
+            <input id="eventTitle" type="text" value="2026-2027 Upper School Curriculum Night">
+          </label>
+          <label>
+            <span>Preview student</span>
+            <select id="studentSelect"></select>
+          </label>
+        </div>
+
+        <div class="stats" id="stats"></div>
+        <div class="alert is-hidden" id="warningPanel"></div>
+
+        <div class="preview-shell">
+          <div class="paper" id="preview"></div>
+        </div>
+
+        <div class="actions">
+          <button class="button primary" id="downloadZip">Download individual PDFs (.zip)</button>
+          <button class="button secondary" id="downloadCombined">Download one combined PDF</button>
+          <button class="button ghost" id="downloadSelected">Download previewed student</button>
+        </div>
+        <p class="download-note" id="downloadNote"></p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>No student information is uploaded or saved by this tool.</p>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
