@@ -70,6 +70,7 @@ input[type="text"]:focus, select:focus { outline: 3px solid rgba(201,149,33,.2);
 
 .preview-shell { margin-top: 24px; padding: 24px; overflow: auto; background: #e7ebf1; border-radius: 14px; }
 .paper { width: 100%; min-width: 760px; padding: 46px 42px 58px; background: white; box-shadow: 0 4px 22px rgba(0,0,0,.12); }
+.preview-logo { display: block; width: auto; height: 58px; margin: 0 auto 12px; }
 .preview-title { margin: 0; text-align: center; color: var(--navy); font-family: Georgia, serif; font-size: 27px; }
 .preview-name { margin: 15px 0 27px; text-align: center; color: var(--gold); font-size: 18px; font-weight: 800; }
 .schedule-table { width: 100%; border-collapse: collapse; table-layout: fixed; font-size: 12px; }
