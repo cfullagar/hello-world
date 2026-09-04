@@ -13,10 +13,15 @@
   const workspace = el('workspace');
   const eventTitle = el('eventTitle');
   const studentSelect = el('studentSelect');
+  const pdfNote = el('pdfNote');
+  const noteCount = el('noteCount');
   const preview = el('preview');
   const stats = el('stats');
   const warningPanel = el('warningPanel');
   const downloadNote = el('downloadNote');
+
+  try { pdfNote.value = localStorage.getItem('cfaPdfNote') || ''; } catch (_) {}
+  noteCount.textContent = `${pdfNote.value.length} / 600`;
 
   function clean(value) {
     return String(value ?? '').replace(/\s+/g, ' ').trim();
@@ -187,7 +192,8 @@
         <tbody>${student.rows.map((r) => `<tr class="${r.missing ? 'missing-row' : ''}">
           <td>${escapeHtml(r.time || 'Missing')}</td><td>${escapeHtml(r.period)}</td><td>${escapeHtml(r.course || 'No course found')}</td><td>${escapeHtml(r.teacher)}</td><td>${escapeHtml(r.location)}</td>
         </tr>`).join('')}</tbody>
-      </table>`;
+      </table>
+      ${clean(pdfNote.value) ? `<div class="preview-note"><strong>EVENING NOTE</strong><span>${escapeHtml(pdfNote.value)}</span></div>` : ''}`;
   }
 
   function wrapText(text, font, size, maxWidth, maxLines = 3) {
@@ -270,6 +276,16 @@
           x += widths[i];
         }
       }
+      const sharedNote = clean(pdfNote.value);
+      if (sharedNote) {
+        const noteLines = wrapText(sharedNote, regular, 8.1, 510, 7);
+        const noteLineHeight = 9.5;
+        const noteHeight = 24 + noteLines.length * noteLineHeight;
+        const noteY = 55;
+        page.drawRectangle({ x: 38, y: noteY, width: 536, height: noteHeight, color: rgb(.985, .969, .925), borderColor: gold, borderWidth: .8 });
+        page.drawText('EVENING NOTE', { x: 50, y: noteY + noteHeight - 14, size: 7.2, font: bold, color: navy });
+        noteLines.forEach((text, lineNo) => page.drawText(text, { x: 50, y: noteY + noteHeight - 28 - lineNo * noteLineHeight, size: 8.1, font: regular, color: ink }));
+      }
       page.drawText('Generated from the uploaded schedule spreadsheet', { x: 38, y: 34, size: 7.3, font: regular, color: muted });
     }
     return doc.save();
@@ -322,6 +338,11 @@
   dropZone.addEventListener('drop', (e) => handleFile(e.dataTransfer.files[0]));
   studentSelect.addEventListener('change', renderPreview);
   eventTitle.addEventListener('input', renderPreview);
+  pdfNote.addEventListener('input', () => {
+    noteCount.textContent = `${pdfNote.value.length} / 600`;
+    try { localStorage.setItem('cfaPdfNote', pdfNote.value); } catch (_) {}
+    renderPreview();
+  });
 
   el('downloadSelected').addEventListener('click', (e) => withBusy(e.currentTarget, 'Generating…', async () => {
     const student = state.students[Number(studentSelect.value) || 0];
