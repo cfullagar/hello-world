@@ -52,6 +52,16 @@
             <span>Preview student</span>
             <select id="studentSelect"></select>
           </label>
+          <label class="note-field">
+            <span>Message on every PDF <em>Optional</em></span>
+            <div class="prompt-field">
+              <textarea id="pdfNote" rows="3" maxlength="600" placeholder="Example: Begin with Advisory, then follow each period in order. Allow five minutes to travel between rooms."></textarea>
+            </div>
+            <div class="prompt-hint">
+              <span>Added to the bottom of every student's PDF.</span>
+              <span id="noteCount">0 / 600</span>
+            </div>
+          </label>
         </div>
 
         <div class="stats" id="stats"></div>
