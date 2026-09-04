@@ -17,6 +17,29 @@
   </header>
 
   <main>
+    <section class="card admin-card" aria-labelledby="admin-options-title">
+      <div class="step admin-step">PDF</div>
+      <div class="section-copy">
+        <div class="section-heading">
+          <div>
+            <h2 id="admin-options-title">Admin PDF Options</h2>
+            <p>Type a shared message to print at the bottom of every student's schedule.</p>
+          </div>
+          <span class="privacy-pill">Applies to every PDF</span>
+        </div>
+        <label class="note-field admin-note-field">
+          <span>Message on every PDF <em>Optional</em></span>
+          <div class="prompt-field">
+            <textarea id="pdfNote" rows="3" maxlength="600" placeholder="Example: Begin with Advisory, then follow each period in order. Allow five minutes to travel between rooms."></textarea>
+          </div>
+          <div class="prompt-hint">
+            <span>Only the finished message text is printed - never this input box.</span>
+            <span id="noteCount">0 / 600</span>
+          </div>
+        </label>
+      </div>
+    </section>
+
     <section class="card upload-card" aria-labelledby="upload-title">
       <div class="step">1</div>
       <div class="section-copy">
@@ -51,16 +74,6 @@
           <label>
             <span>Preview student</span>
             <select id="studentSelect"></select>
-          </label>
-          <label class="note-field">
-            <span>Message on every PDF <em>Optional</em></span>
-            <div class="prompt-field">
-              <textarea id="pdfNote" rows="3" maxlength="600" placeholder="Example: Begin with Advisory, then follow each period in order. Allow five minutes to travel between rooms."></textarea>
-            </div>
-            <div class="prompt-hint">
-              <span>Added to the bottom of every student's PDF.</span>
-              <span id="noteCount">0 / 600</span>
-            </div>
           </label>
         </div>
 
