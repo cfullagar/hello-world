@@ -280,11 +280,11 @@
       if (sharedNote) {
         const noteLines = wrapText(sharedNote, regular, 8.1, 510, 7);
         const noteLineHeight = 9.5;
-        const noteHeight = 24 + noteLines.length * noteLineHeight;
-        const noteY = 55;
-        page.drawRectangle({ x: 38, y: noteY, width: 536, height: noteHeight, color: rgb(.985, .969, .925), borderColor: gold, borderWidth: .8 });
-        page.drawText('EVENING NOTE', { x: 50, y: noteY + noteHeight - 14, size: 7.2, font: bold, color: navy });
-        noteLines.forEach((text, lineNo) => page.drawText(text, { x: 50, y: noteY + noteHeight - 28 - lineNo * noteLineHeight, size: 8.1, font: regular, color: ink }));
+        const noteBottom = 57;
+        const noteTop = noteBottom + 20 + noteLines.length * noteLineHeight;
+        page.drawLine({ start: { x: 38, y: noteTop }, end: { x: 574, y: noteTop }, thickness: 1.2, color: gold });
+        page.drawText('EVENING NOTE', { x: 38, y: noteTop - 14, size: 7.2, font: bold, color: navy });
+        noteLines.forEach((text, lineNo) => page.drawText(text, { x: 38, y: noteTop - 28 - lineNo * noteLineHeight, size: 8.1, font: regular, color: ink }));
       }
       page.drawText('Generated from the uploaded schedule spreadsheet', { x: 38, y: 34, size: 7.3, font: regular, color: muted });
     }
