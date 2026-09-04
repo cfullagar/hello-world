@@ -59,6 +59,9 @@ label > span em { margin-left: 5px; color: var(--muted); font-size: 11px; font-s
 input[type="text"], select { width: 100%; height: 46px; padding: 0 13px; color: var(--ink); background: white; border: 1px solid #c9d1dc; border-radius: 9px; font: inherit; }
 input[type="text"]:focus, select:focus, textarea:focus { outline: 3px solid rgba(201,149,33,.2); border-color: var(--gold); }
 .note-field { grid-column: 1 / -1; }
+.admin-card { border-left: 5px solid var(--gold); background: linear-gradient(135deg, #fff 0%, #fffdf7 100%); }
+.admin-step { font-size: 9px; letter-spacing: .04em; }
+.admin-note-field { display: block; margin-top: 20px; }
 .prompt-field { position: relative; padding: 4px; background: linear-gradient(135deg, rgba(201,149,33,.38), rgba(11,35,70,.22)); border-radius: 15px; }
 .prompt-field textarea { display: block; width: 100%; min-height: 94px; padding: 15px 17px; resize: vertical; color: var(--ink); background: white; border: 1px solid transparent; border-radius: 11px; font: inherit; line-height: 1.5; }
 .prompt-field textarea::placeholder { color: #8993a3; }
@@ -89,7 +92,7 @@ input[type="text"]:focus, select:focus, textarea:focus { outline: 3px solid rgba
 .schedule-table th:nth-child(4) { width: 22%; }
 .schedule-table th:nth-child(5) { width: 12%; }
 .missing-row { color: var(--danger); background: #fff4f2 !important; }
-.preview-note { display: grid; grid-template-columns: 112px 1fr; gap: 14px; margin-top: 24px; padding: 15px 17px; color: var(--ink); background: #fcf7e9; border: 1px solid #dec27d; border-radius: 8px; font-size: 12px; line-height: 1.5; }
+.preview-note { display: grid; grid-template-columns: 112px 1fr; gap: 14px; margin-top: 24px; padding: 14px 0 0; color: var(--ink); border-top: 2px solid var(--gold); font-size: 12px; line-height: 1.5; }
 .preview-note strong { color: var(--navy); font-size: 11px; letter-spacing: .08em; }
 .preview-note span { white-space: pre-wrap; }
 
