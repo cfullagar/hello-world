@@ -27,8 +27,22 @@
     return String(value ?? '').replace(/\s+/g, ' ').trim();
   }
 
+  function cleanMultiline(value) {
+    return String(value ?? '')
+      .replace(/\r\n?/g, '\n')
+      .split('\n')
+      .map((line) => line.replace(/[ \t]+/g, ' ').trim())
+      .join('\n')
+      .replace(/\n{3,}/g, '\n\n')
+      .trim();
+  }
+
   function escapeHtml(value) {
     return clean(value).replace(/[&<>'"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[c]));
+  }
+
+  function escapeNoteHtml(value) {
+    return cleanMultiline(value).replace(/[&<>'"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[c]));
   }
 
   function columnIndex(ref) {
@@ -193,7 +207,7 @@
           <td>${escapeHtml(r.time || 'Missing')}</td><td>${escapeHtml(r.period)}</td><td>${escapeHtml(r.course || 'No course found')}</td><td>${escapeHtml(r.teacher)}</td><td>${escapeHtml(r.location)}</td>
         </tr>`).join('')}</tbody>
       </table>
-      ${clean(pdfNote.value) ? `<div class="preview-note"><strong>EVENING NOTE</strong><span>${escapeHtml(pdfNote.value)}</span></div>` : ''}`;
+      ${cleanMultiline(pdfNote.value) ? `<div class="preview-note"><strong>EVENING NOTE</strong><span>${escapeNoteHtml(pdfNote.value)}</span></div>` : ''}`;
   }
 
   function wrapText(text, font, size, maxWidth, maxLines = 3) {
@@ -215,6 +229,27 @@
       return kept;
     }
     return lines;
+  }
+
+  function wrapMultilineText(text, font, size, maxWidth, maxLines = 11) {
+    const lines = [];
+    for (const rawLine of cleanMultiline(text).split('\n')) {
+      if (!rawLine) {
+        if (lines.length && lines[lines.length - 1] !== '') lines.push('');
+        continue;
+      }
+      lines.push(...wrapText(rawLine, font, size, maxWidth, 99));
+    }
+    if (lines.length <= maxLines) return lines;
+    const kept = lines.slice(0, maxLines);
+    let last = kept[maxLines - 1] || '';
+    if (!last) last = '...';
+    else {
+      while (last && font.widthOfTextAtSize(`${last}...`, size) > maxWidth) last = last.slice(0, -1);
+      last = `${last}...`;
+    }
+    kept[maxLines - 1] = last;
+    return kept;
   }
 
   function drawCentered(page, text, font, size, y, color) {
@@ -276,15 +311,19 @@
           x += widths[i];
         }
       }
-      const sharedNote = clean(pdfNote.value);
+      const sharedNote = cleanMultiline(pdfNote.value);
       if (sharedNote) {
-        const noteLines = wrapText(sharedNote, regular, 8.1, 510, 7);
-        const noteLineHeight = 9.5;
+        const noteLines = wrapMultilineText(sharedNote, regular, 7.9, 536, 11);
+        const noteLineHeight = 9;
         const noteBottom = 57;
         const noteTop = noteBottom + 20 + noteLines.length * noteLineHeight;
         page.drawLine({ start: { x: 38, y: noteTop }, end: { x: 574, y: noteTop }, thickness: 1.2, color: gold });
         page.drawText('EVENING NOTE', { x: 38, y: noteTop - 14, size: 7.2, font: bold, color: navy });
-        noteLines.forEach((text, lineNo) => page.drawText(text, { x: 38, y: noteTop - 28 - lineNo * noteLineHeight, size: 8.1, font: regular, color: ink }));
+        noteLines.forEach((text, lineNo) => {
+          if (!text) return;
+          const heading = text.length <= 60 && text === text.toUpperCase() && /[A-Z]/.test(text);
+          page.drawText(text, { x: 38, y: noteTop - 28 - lineNo * noteLineHeight, size: 7.9, font: heading ? bold : regular, color: ink });
+        });
       }
       page.drawText('Generated from the uploaded schedule spreadsheet', { x: 38, y: 34, size: 7.3, font: regular, color: muted });
     }
